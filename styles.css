@@ -1,0 +1,66 @@
+QMainWindow {
+    background-color: #ffffff;
+}
+
+/* TITULO */
+
+QLabel#titulo {
+    color: rgb(255, 255, 255);
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* BOTONES SUPERIORES */
+
+QPushButton {
+    background-color: transparent;
+    border: 2px solid #38bdf8;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #38bdf8;
+}
+
+/* LISTA ARCHIVOS */
+
+QListWidget {
+    background-color: #1e293b;
+    border-radius: 10px;
+    color: white;
+    padding: 5px;
+}
+
+/* TABLA */
+
+QTableWidget {
+    background-color: #1e293b;
+    border-radius: 10px;
+    color: white;
+    gridline-color: #334155;
+}
+
+QHeaderView::section {
+    background-color: #334155;
+    color: white;
+    padding: 6px;
+    border: none;
+}
+
+QPushButton{
+    background-color:#2D89EF;
+    color:white;
+    border-radius:8px;
+    padding:8px;
+}
+
+QPushButton:hover{
+    background-color:#1B5FBD;
+}
+
+QPushButton:pressed{
+    background-color:#0E3F7A;
+}
