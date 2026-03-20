@@ -164,7 +164,7 @@ class VentanaPrincipal(QMainWindow):
         #self.tabla.cellDoubleClicked.connect(self.ver_detalle)
 
     def ejecutar_conciliacion(self):
-        url = "http://127.0.0.1:8000/api/conciliar/"
+        url = "http://34.172.70.87/api/conciliar/"
         
         files = []
         handlers = []

@@ -9,10 +9,11 @@ from .componentes import procesar_componentes
 from .deteccion_archivos import detectar_columna_articulo
 from .deteccion_archivos import detectar_columna_cantidad
 from .deteccion_archivos import detectar_columna_descripcion
-from .ia_diferencias import analizar_diferencias_ia
 
 
 def conciliar_archivos_backend(archivos):
+        
+        from .ia_diferencias import analizar_diferencias_ia
         
         print("Iniciando conciliacion...")
 

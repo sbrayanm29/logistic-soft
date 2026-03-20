@@ -117,3 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 600 * 1024 * 1024  # 600 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 600 * 1024 * 1024  # 600 MB
+DATA_UPLOAD_MAX_NUMBER_FILES = 1000
