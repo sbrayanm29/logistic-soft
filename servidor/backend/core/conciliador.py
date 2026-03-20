@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 from .limpieza_datos import limpiar_columnas
 from .deteccion_archivos import detectar_tipo_archivo
 from .deteccion_archivos import detectar_sistema
@@ -14,30 +15,37 @@ from .deteccion_archivos import detectar_columna_descripcion
 def conciliar_archivos_backend(archivos):
         
         from .ia_diferencias import analizar_diferencias_ia
-        
+
         print("Iniciando conciliacion...")
-
+        
         datos = []
-      
-        restricciones_df = None
-        ajustes_df = None
-        recibos_df = None
-        componentes_df = None
-        rma_df = None
-        cuadre_df = None
-
+        
         for i, archivo in enumerate(archivos):
             print("Procesando:", archivo)
+            df = None
+            # Intentar abrir Excel .xlsx, .xls o CSV
             try:
-                df = pd.read_excel(archivo, engine="xlrd")
-            except:
-                try:
-                    df = pd.read_excel(archivo, engine="openpyxl")
-                except:
+                if archivo.endswith(".xls"):
                     try:
-                        df = pd.read_csv(archivo)
-                    except:
-                        raise Exception(f"No se pudo leer el archivo: {archivo}")
+                        import xlrd
+                    except ImportError:
+                        raise ImportError("Instala 'xlrd' para leer archivos .xls: pip install xlrd")
+                    df = pd.read_excel(archivo, engine="xlrd")
+                elif archivo.endswith(".xlsx"):
+                    try:
+                        import openpyxl
+                    except ImportError:
+                        raise ImportError("Instala 'openpyxl' para leer archivos .xlsx: pip install openpyxl")
+                    df = pd.read_excel(archivo, engine="openpyxl")
+                elif archivo.endswith(".csv"):
+                    try:
+                        df = pd.read_csv(archivo, encoding="utf-8")
+                    except UnicodeDecodeError:
+                        df = pd.read_csv(archivo, encoding="latin1")
+                    else:
+                        raise Exception(f"Formato no soportado: {archivo}")
+            except Exception as e:
+                raise Exception(f"No se pudo leer el archivo {archivo}: {e}")
                 
             df = limpiar_columnas(df) 
             tipo = detectar_tipo_archivo(df) 
