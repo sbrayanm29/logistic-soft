@@ -5,10 +5,14 @@ import pandas as pd
 import tempfile
 import os
 
-from core.conciliador import conciliar_archivos_backend  # IMPORTANTE
+from django.http import JsonResponse
+import json
 
-@api_view(['POST'])
-def conciliar(request):
-    return Response({
-        "mensaje": "Procesamiento ahora es local"
-    })
+def guardar_resultado(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        # aquí guardas en DB
+        print("Recibido:", len(data))
+
+        return JsonResponse({"status": "ok"})

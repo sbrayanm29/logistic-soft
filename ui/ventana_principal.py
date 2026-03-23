@@ -9,12 +9,15 @@ from PySide6.QtWidgets import (
     QGraphicsOpacityEffect, QListWidgetItem, QFrame
 )
 
+from cliente_api import conciliar_local, enviar_resultado
+
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill
 
 from ui.descargas import DescargaChrome
+
 
 class VentanaPrincipal(QMainWindow):
 
@@ -91,7 +94,31 @@ class VentanaPrincipal(QMainWindow):
         self.boton_upload.clicked.connect(self.subir_archivo)
 
         self.boton_conciliar = QPushButton("Conciliar")
-        self.boton_conciliar.clicked.connect(self.ejecutar_conciliacion)
+        def ejecutar_conciliacion(self):
+            if not self.archivos:
+                print("No hay archivos")
+                return
+            self.boton_conciliar.setEnabled(False)
+            self.boton_upload.setEnabled(False)
+            
+            try:
+                print("Iniciando conciliación LOCAL...")
+                
+                resultado = conciliar_local(self.archivos)
+                
+                if resultado is not None:
+                    print("Conciliación terminada")
+                    
+                    enviar_resultado(resultado)
+                    
+                    self.mostrar_tabla(resultado)
+                else:
+                    print("Sin resultados")
+            except Exception as e:
+                print("Error:", str(e))
+                
+                self.boton_conciliar.setEnabled(True)
+                self.boton_upload.setEnabled(True)
 
         botones.addWidget(self.boton_upload)
         botones.addWidget(self.boton_conciliar)
@@ -161,31 +188,20 @@ class VentanaPrincipal(QMainWindow):
 
         self.detalle_componentes = None
         self.detalle_restricciones = None
-        #self.tabla.cellDoubleClicked.connect(self.ver_detalle)
 
-    def ejecutar_conciliacion(self):
-        url = "http://34.172.70.87/api/conciliar/"
-        
-        files = []
-        handlers = []
-        
-        for ruta in self.archivos:
-            f = open(ruta, "rb")
-            handlers.append(f)
-            files.append(("archivos", f))
+    def enviar_resultado(resultado_df):
+        URL_GUARDAR = "http://TU_IP/api/guardar/"
+
+        try:
+            data = resultado_df.to_dict(orient="records")
+            response = requests.post(URL_GUARDAR, json=data)
             
-        response = requests.post(url, files=files)
-        
-        # cerrar archivos
-        for f in handlers:
-            f.close()
-            
-        if response.status_code == 200:
-            data = response.json()
-            df = pd.DataFrame(data)
-            self.mostrar_tabla(df)
-        else:
-            print("Error:", response.text)
+            if response.status_code == 200:
+                print("Guardado OK")
+            else:
+                print("Error servidor:", response.text)
+        except Exception as e:
+            print("Error conexión:", str(e))
 
     def cambiar_pagina(self, pagina):
         effect = QGraphicsOpacityEffect(self.contenido.currentWidget())
