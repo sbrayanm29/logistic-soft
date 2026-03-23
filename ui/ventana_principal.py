@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QGraphicsOpacityEffect, QListWidgetItem, QFrame
 )
 
-from cliente_api import conciliar_local, enviar_resultado
+from cliente_api.api_client import conciliar_local
 
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 
